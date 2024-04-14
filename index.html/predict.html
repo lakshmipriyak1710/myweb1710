@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heart Disease Prediction</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url('background_image.jpg'); /* Replace 'background_image.jpg' with the path to your image */
+      background-size: cover; /* Cover the entire background */
+      background-repeat: no-repeat; /* Prevent the background image from repeating */
+      background-position: center; /* Center the background image */
+      background-color: #E1F0FA; /* Background color */
+    }
+    .container {
+      width: 80%;
+      margin: 50px auto;
+      background-color: #87CEEB; /* Container background color */
+      padding: 20px;
+      border-radius: 10px; /* Rounded corners for the container */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for the container */
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    input[type="submit"] {
+      width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+    #result {
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .input-group {
+      margin-bottom: 20px;
+    }
+    #historyContainer {
+      margin-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Form with additional name and email fields -->
+    <h1>Heart Disease Prediction</h1>
+    <form id="heart-disease-form" onsubmit="return saveUserDetails(event)">
+      <!-- Input fields for heart disease prediction -->
+      <label for="fasting-sugar">Fasting Sugar Level (mg/dL):</label>
+      <input type="number" id="fasting-sugar" name="fasting-sugar" required>
+      
+      <label for="after-fasting-sugar">After Fasting Sugar Level (mg/dL):</label>
+      <input type="number" id="after-fasting-sugar" name="after-fasting-sugar" required>
+      
+      <label for="cholesterol">Cholesterol Level (mg/dL):</label>
+      <input type="number" id="cholesterol" name="cholesterol" required>
+      
+      <label for="blood-pressure">Blood Pressure (mmHg):</label>
+      <input type="text" id="blood-pressure" name="blood-pressure" required>
+      
+      <label for="smoking">Smoking Status:</label>
+      <select id="smoking" name="smoking" required>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+
+      <label for="sleep-apnea">Sleep Apnea:</label>
+      <select id="sleep-apnea" name="sleep-apnea" required>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+
+      <!-- Input fields for name and email -->
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      
+      <!-- Submit button -->
+      <input type="submit" value="Predict">
+    </form>
+    <!-- Container to display prediction result -->
+    <div id="result"></div>
+  </div>
+
+  <!-- Input group for admin password -->
+  <div class="input-group">
+    <label for="password">Only admin can view the history:</label>
+    <input type="password" id="password" required>
+    <button onclick="authenticatePassword()">Submit</button>
+  </div>
+
+  <!-- Container to display user details history -->
+  <div id="historyContainer"></div>
+
+  <!-- JavaScript code -->
+  <script>
+    function predictHeartDisease(fastingSugar, afterFastingSugar, cholesterol, bloodPressure, smoking, sleepApnea) {
+      // Simple prediction logic (for demonstration purposes)
+      var prediction = "Not affected by heart disease";
+      if ((fastingSugar > 100 || afterFastingSugar > 140) && (cholesterol > 200 || bloodPressure >= "140/90" || smoking === "yes" || sleepApnea === "yes")) {
+        prediction = "Near to heart disease; consult your doctor";
+      }
+      document.getElementById('result').innerText = prediction;
+      return prediction;
+    }
+
+    function saveUserDetails(event) {
+      event.preventDefault();
+      // Get form inputs
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const fastingSugar = parseInt(document.getElementById('fasting-sugar').value);
+      const afterFastingSugar = parseInt(document.getElementById('after-fasting-sugar').value);
+      const cholesterol = parseInt(document.getElementById('cholesterol').value);
+      const bloodPressure = document.getElementById('blood-pressure').value;
+      const smoking = document.getElementById('smoking').value;
+      const sleepApnea = document.getElementById('sleep-apnea').value;
+
+      // Predict heart disease
+      const prediction = predictHeartDisease(fastingSugar, afterFastingSugar, cholesterol, bloodPressure, smoking, sleepApnea);
+
+      // Create object to store user details including prediction result
+      const userDetails = {
+        name: name,
+        email: email,
+        fastingSugar: fastingSugar,
+        afterFastingSugar: afterFastingSugar,
+        cholesterol: cholesterol,
+        bloodPressure: bloodPressure,
+        smoking: smoking,
+        sleepApnea: sleepApnea,
+        prediction: prediction // Include prediction result
+      };
+
+      // Retrieve existing user details from localStorage or initialize empty array
+      let userHistory = JSON.parse(localStorage.getItem('userHistory')) || [];
+      // Add new user details to the array
+      userHistory.push(userDetails);
+      // Store updated user history back to localStorage
+      localStorage.setItem('userHistory', JSON.stringify(userHistory));
+      alert('User details saved successfully!');
+      // Clear form inputs
+      document.getElementById('name').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('fasting-sugar').value = '';
+      document.getElementById('after-fasting-sugar').value = '';
+      document.getElementById('cholesterol').value = '';
+      document.getElementById('blood-pressure').value = '';
+      document.getElementById('smoking').value = '';
+      document.getElementById('sleep-apnea').value = '';
+      return false; // Prevent form submission
+    }
+
+    function authenticatePassword() {
+      const password = document.getElementById('password').value;
+      // Replace 'admin' with the actual password you want to use
+      if (password === 'admin') {
+        // Correct password, display user details history
+        document.getElementById('historyContainer').style.display = 'block';
+        viewUserDetailsHistory();
+      } else {
+        alert('Incorrect password. Please try again.');
+      }
+    }
+ 
+    function viewUserDetailsHistory() {
+      // Retrieve user history from localStorage
+      const userHistory = JSON.parse(localStorage.getItem('userHistory'));
+      if (userHistory && userHistory.length > 0) {
+        // Create a table to display user details history
+        const table = document.createElement('table');
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Fasting Sugar Level (mg/dL)</th>
+              <th>After Fasting Sugar Level (mg/dL)</th>
+              <th>Cholesterol Level (mg/dL)</th>
+              <th>Blood Pressure (mmHg)</th>
+              <th>Smoking Status</th>
+              <th>Sleep Apnea</th>
+              <th>Prediction</th>
+            </tr>
+          </thead>
+          <tbody id="userDetailsBody">
+          </tbody>
+        `;
+        
+        // Populate the table with user details
+        const userDetailsBody = table.querySelector('#userDetailsBody');
+        userHistory.forEach(user => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>${user.fastingSugar}</td>
+            <td>${user.afterFastingSugar}</td>
+            <td>${user.cholesterol}</td>
+            <td>${user.bloodPressure}</td>
+            <td>${user.smoking}</td>
+            <td>${user.sleepApnea}</td>
+            <td>${user.prediction}</td>
+          `;
+          userDetailsBody.appendChild(row);
+        });
+
+        // Clear existing history and display new history
+        const historyContainer = document.getElementById('historyContainer');
+        historyContainer.innerHTML = '';
+        historyContainer.appendChild(table);
+      } else {
+        alert('No user details found in history.');
+      }
+    }
+  </script>
+</body>
+</html>
