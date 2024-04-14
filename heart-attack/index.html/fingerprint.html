@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fingerprint Authentication</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://img.freepik.com/premium-photo/blood-pressure-monitor-isolated-white-background-3d-rendering_844453-83.jpg'); /* Replace 'background_image.jpg' with the path to your image */
+            background-size: cover; /* Cover the entire background */
+            background-repeat: no-repeat; /* Prevent the background image from repeating */
+            background-position: center; /* Center the background image */
+        }
+        .container {
+            max-width: 400px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .fingerprint-icon {
+            width: 100px;
+            height: 100px;
+            background-color: lightgrey;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Fingerprint Authentication</h2>
+    <div class="fingerprint-icon"></div>
+    <p>Touch the fingerprint sensor to authenticate.</p>
+    <button class="button" onclick="startFingerprintAuthentication()">Authenticate</button>
+    <div id="status"></div>
+</div>
+
+<script>
+    function startFingerprintAuthentication() {
+        // Simulate starting fingerprint scan process
+        document.getElementById('status').innerText = "Fingerprint scan process started. Please place your finger on the sensor.";
+
+        // Simulate blood pressure reading after scan completes
+        setTimeout(function() {
+            var bloodPressure = Math.floor(Math.random() * (140 - 90 + 1)) + 90; // Random blood pressure between 90 and 140
+            document.getElementById('status').innerText = "Blood pressure reading: " + bloodPressure + " mmHg";
+        }, 2000); // Simulate a delay of 2 seconds for the scan process
+    }
+</script>
+<a href='file:///C:/Users/priya/Desktop/index.html/predict.html'>click here for further process user</a>
+</body>
+</html>
